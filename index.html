@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmacyApp - Автоматизация аптек</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 5px 15px;
+            border: 1px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active, .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 150px 0 100px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        /* Screenshots Section */
+        .screenshots {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .screenshots .section-title {
+            color: white;
+        }
+
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .screenshot-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .screenshot-card img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .screenshot-card p {
+            padding: 1rem;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Download Section */
+        .download {
+            background: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .download-card {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .download-card h2 {
+            margin-bottom: 1rem;
+        }
+
+        .download-card p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 50px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .contact .section-title {
+            color: white;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .contact-item {
+            padding: 2rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-pills"></i>
+                <span data-i18n="logo">PharmacyApp</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features" data-i18n="features">Возможности</a></li>
+                <li><a href="#screenshots" data-i18n="screenshots">Скриншоты</a></li>
+                <li><a href="#download" data-i18n="download">Скачать</a></li>
+                <li><a href="#contact" data-i18n="contact">Контакты</a></li>
+            </ul>
+            <div class="lang-switch">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="uz">UZ</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1 data-i18n="hero_title">Автоматизация вашей аптеки</h1>
+            <p data-i18n="hero_subtitle">Современное мобильное приложение для управления продажами и инвентарем</p>
+            <div class="hero-buttons">
+                <a href="#download" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    <span data-i18n="download_now">Скачать сейчас</span>
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i>
+                    <span data-i18n="learn_more">Узнать больше</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title" data-i18n="features_title">Возможности приложения</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-boxes"></i>
+                    <h3 data-i18n="feature1_title">Управление инвентарем</h3>
+                    <p data-i18n="feature1_desc">Полный контроль над ассортиментом товаров, отслеживание остатков и сроков годности</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-cash-register"></i>
+                    <h3 data-i18n="feature2_title">POS система</h3>
+                    <p data-i18n="feature2_desc">Быстрая продажа товаров, сканирование штрих-кодов, автоматический расчет стоимости</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3 data-i18n="feature3_title">Аналитика и отчеты</h3>
+                    <p data-i18n="feature3_desc">Детальная аналитика продаж, отчеты о прибыльности и популярности товаров</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3 data-i18n="feature4_title">Управление пользователями</h3>
+                    <p data-i18n="feature4_desc">Разграничение прав доступа, авторизация сотрудников, контроль действий</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-wifi"></i>
+                    <h3 data-i18n="feature5_title">Офлайн режим</h3>
+                    <p data-i18n="feature5_desc">Работа без интернета с автоматической синхронизацией при подключении</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-language"></i>
+                    <h3 data-i18n="feature6_title">Мультиязычность</h3>
+                    <p data-i18n="feature6_desc">Поддержка узбекского, русского и английского языков</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="screenshots" id="screenshots">
+        <div class="container">
+            <h2 class="section-title" data-i18n="screenshots_title">Скриншоты приложения</h2>
+            <div class="screenshots-grid">
+                <div class="screenshot-card">
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-mobile-alt" style="font-size: 5rem;"></i>
+                    </div>
+                    <p data-i18n="screenshot1">Главный экран</p>
+                </div>
+                <div class="screenshot-card">
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-pills" style="font-size: 5rem;"></i>
+                    </div>
+                    <p data-i18n="screenshot2">Инвентарь</p>
+                </div>
+                <div class="screenshot-card">
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-shopping-cart" style="font-size: 5rem;"></i>
+                    </div>
+                    <p data-i18n="screenshot3">POS система</p>
+                </div>
+                <div class="screenshot-card">
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-chart-pie" style="font-size: 5rem;"></i>
+                    </div>
+                    <p data-i18n="screenshot4">Отчеты</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="download" id="download">
+        <div class="container">
+            <div class="download-card">
+                <h2 data-i18n="download_title">Скачайте приложение</h2>
+                <p data-i18n="download_desc">Получите полную версию приложения бесплатно и начните автоматизировать свою аптеку уже сегодня</p>
+                <a href="app-release.apk" class="download-btn" download>
+                    <i class="fab fa-android"></i>
+                    <span data-i18n="download_apk">Скачать APK (70.6 MB)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title" data-i18n="contact_title">Свяжитесь с нами</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <p>info@pharmacyapp.uz</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <p>+998 90 123 45 67</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-telegram"></i>
+                    <p>@pharmacyapp</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PharmacyApp. <span data-i18n="footer">Все права защищены.</span></p>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            ru: {
+                logo: "PharmacyApp",
+                features: "Возможности",
+                screenshots: "Скриншоты",
+                download: "Скачать",
+                contact: "Контакты",
+                hero_title: "Автоматизация вашей аптеки",
+                hero_subtitle: "Современное мобильное приложение для управления продажами и инвентарем",
+                download_now: "Скачать сейчас",
+                learn_more: "Узнать больше",
+                features_title: "Возможности приложения",
+                feature1_title: "Управление инвентарем",
+                feature1_desc: "Полный контроль над ассортиментом товаров, отслеживание остатков и сроков годности",
+                feature2_title: "POS система",
+                feature2_desc: "Быстрая продажа товаров, сканирование штрих-кодов, автоматический расчет стоимости",
+                feature3_title: "Аналитика и отчеты",
+                feature3_desc: "Детальная аналитика продаж, отчеты о прибыльности и популярности товаров",
+                feature4_title: "Управление пользователями",
+                feature4_desc: "Разграничение прав доступа, авторизация сотрудников, контроль действий",
+                feature5_title: "Офлайн режим",
+                feature5_desc: "Работа без интернета с автоматической синхронизацией при подключении",
+                feature6_title: "Мультиязычность",
+                feature6_desc: "Поддержка узбекского, русского и английского языков",
+                screenshots_title: "Скриншоты приложения",
+                screenshot1: "Главный экран",
+                screenshot2: "Инвентарь",
+                screenshot3: "POS система",
+                screenshot4: "Отчеты",
+                download_title: "Скачайте приложение",
+                download_desc: "Получите полную версию приложения бесплатно и начните автоматизировать свою аптеку уже сегодня",
+                download_apk: "Скачать APK (70.6 MB)",
+                contact_title: "Свяжитесь с нами",
+                footer: "Все права защищены."
+            },
+            uz: {
+                logo: "PharmacyApp",
+                features: "Imkoniyatlar",
+                screenshots: "Ekran rasmlari",
+                download: "Yuklab olish",
+                contact: "Aloqa",
+                hero_title: "Dorixonangizni avtomatlashtiring",
+                hero_subtitle: "Sotuv va inventarni boshqarish uchun zamonaviy mobil ilova",
+                download_now: "Hozir yuklab oling",
+                learn_more: "Ko'proq bilib oling",
+                features_title: "Ilova imkoniyatlari",
+                feature1_title: "Inventar boshqaruvi",
+                feature1_desc: "Tovarlar assortimenti ustidan to'liq nazorat, qoldiq va yaroqlilik muddatlarini kuzatish",
+                feature2_title: "POS tizimi",
+                feature2_desc: "Tezkor tovar sotuvi, shtrix-kod skanirlash, narxni avtomatik hisoblash",
+                feature3_title: "Analitika va hisobotlar",
+                feature3_desc: "Sotuvlar bo'yicha batafsil analitika, foyda va tovarlar mashhurligi hisobotlari",
+                feature4_title: "Foydalanuvchilarni boshqarish",
+                feature4_desc: "Huquqlarni bo'lish, xodimlarni avtorizatsiyasi, harakatlarni nazorat",
+                feature5_title: "Offline rejim",
+                feature5_desc: "Internet siz ishlash, ulanishda avtomatik sinxronizatsiya",
+                feature6_title: "Ko'p tillilik",
+                feature6_desc: "O'zbek, rus va ingliz tillarini qo'llab-quvvatlash",
+                screenshots_title: "Ilova ekran rasmlari",
+                screenshot1: "Bosh ekran",
+                screenshot2: "Inventar",
+                screenshot3: "POS tizimi",
+                screenshot4: "Hisobotlar",
+                download_title: "Ilovani yuklab oling",
+                download_desc: "Ilovaning to'liq versiyasini bepul oling va dorixonangizni avtomatlashtirishni boshlang",
+                download_apk: "APK yuklab olish (70.6 MB)",
+                contact_title: "Biz bilan bog'laning",
+                footer: "Barcha huquqlar himoyalangan."
+            },
+            en: {
+                logo: "PharmacyApp",
+                features: "Features",
+                screenshots: "Screenshots",
+                download: "Download",
+                contact: "Contact",
+                hero_title: "Automate Your Pharmacy",
+                hero_subtitle: "Modern mobile application for sales and inventory management",
+                download_now: "Download Now",
+                learn_more: "Learn More",
+                features_title: "App Features",
+                feature1_title: "Inventory Management",
+                feature1_desc: "Full control over product assortment, tracking stock and expiry dates",
+                feature2_title: "POS System",
+                feature2_desc: "Quick product sales, barcode scanning, automatic cost calculation",
+                feature3_title: "Analytics & Reports",
+                feature3_desc: "Detailed sales analytics, profitability and product popularity reports",
+                feature4_title: "User Management",
+                feature4_desc: "Access control, staff authorization, action monitoring",
+                feature5_title: "Offline Mode",
+                feature5_desc: "Work without internet with automatic synchronization when connected",
+                feature6_title: "Multi-language",
+                feature6_desc: "Support for Uzbek, Russian and English languages",
+                screenshots_title: "App Screenshots",
+                screenshot1: "Home Screen",
+                screenshot2: "Inventory",
+                screenshot3: "POS System",
+                screenshot4: "Reports",
+                download_title: "Download the App",
+                download_desc: "Get the full version of the app for free and start automating your pharmacy today",
+                download_apk: "Download APK (70.6 MB)",
+                contact_title: "Contact Us",
+                footer: "All rights reserved."
+            }
+        };
+
+        let currentLang = 'ru';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.documentElement.lang = lang;
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.getAttribute('data-lang'));
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
