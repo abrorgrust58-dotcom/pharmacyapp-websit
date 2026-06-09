@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PharmacyApp - Автоматизация аптек</title>
+    <meta name="description" content="Современное мобильное приложение для автоматизации аптек. Управление продажами, инвентарем и аналитикой.">
+    <meta name="keywords" content="аптека, автоматизация, мобильное приложение, управление продажами, инвентарь">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -17,6 +19,7 @@
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
 
         .container {
@@ -27,13 +30,14 @@
 
         /* Navigation */
         nav {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
         }
 
         nav .container {
@@ -43,13 +47,16 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .logo i {
-            margin-right: 10px;
+            font-size: 2rem;
         }
 
         .nav-links {
@@ -61,8 +68,24 @@
         .nav-links a {
             text-decoration: none;
             color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
@@ -75,59 +98,89 @@
         }
 
         .lang-btn {
-            padding: 5px 15px;
-            border: 1px solid #667eea;
+            padding: 8px 20px;
+            border: 2px solid #667eea;
             background: transparent;
             color: #667eea;
-            border-radius: 20px;
+            border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
         }
 
         .lang-btn.active, .lang-btn:hover {
             background: #667eea;
             color: white;
+            transform: scale(1.05);
         }
 
         /* Hero Section */
         .hero {
-            padding: 150px 0 100px;
+            padding: 180px 0 120px;
             text-align: center;
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
             animation: fadeInUp 1s ease;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
         }
 
         .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
             animation: fadeInUp 1s ease 0.2s backwards;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             justify-content: center;
             animation: fadeInUp 1s ease 0.4s backwards;
         }
 
         .btn {
-            padding: 15px 40px;
+            padding: 18px 50px;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .btn-primary {
@@ -136,66 +189,93 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         .btn-secondary {
-            background: transparent;
+            background: rgba(255,255,255,0.2);
             color: white;
             border: 2px solid white;
+            backdrop-filter: blur(10px);
         }
 
         .btn-secondary:hover {
             background: white;
             color: #667eea;
+            transform: translateY(-5px);
         }
 
         /* Features Section */
         .features {
             background: white;
-            padding: 100px 0;
+            padding: 120px 0;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
+            font-size: 3rem;
+            margin-bottom: 4rem;
             color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
         }
 
         .feature-card {
-            padding: 2rem;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
             text-align: center;
-            transition: transform 0.3s;
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .feature-card i {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: #667eea;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .feature-card h3 {
             margin-bottom: 1rem;
             color: #333;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
         }
 
         /* Screenshots Section */
         .screenshots {
-            padding: 100px 0;
+            padding: 120px 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
@@ -204,82 +284,125 @@
             color: white;
         }
 
+        .screenshots .section-title::after {
+            background: linear-gradient(90deg, white, rgba(255,255,255,0.5));
+        }
+
         .screenshots-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
         }
 
         .screenshot-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: all 0.4s;
         }
 
-        .screenshot-card img {
+        .screenshot-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+        }
+
+        .screenshot-card .placeholder {
             width: 100%;
-            height: 400px;
-            object-fit: cover;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
         }
 
         .screenshot-card p {
-            padding: 1rem;
+            padding: 1.5rem;
             color: #333;
             text-align: center;
             font-weight: bold;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8eb);
+            margin: 0;
         }
 
         /* Download Section */
         .download {
             background: white;
-            padding: 100px 0;
+            padding: 120px 0;
             text-align: center;
         }
 
         .download-card {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 3rem;
-            border-radius: 20px;
+            padding: 4rem;
+            border-radius: 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 15s linear infinite;
+        }
+
+        .download-card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .download-card h2 {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
         }
 
         .download-card p {
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            font-size: 1.2rem;
+            line-height: 1.8;
         }
 
         .download-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 20px 50px;
+            gap: 15px;
+            padding: 25px 60px;
             background: white;
             color: #667eea;
             border: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .download-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .download-btn i {
+            font-size: 1.5rem;
         }
 
         /* Contact Section */
         .contact {
-            padding: 100px 0;
+            padding: 120px 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
@@ -288,37 +411,63 @@
             color: white;
         }
 
+        .contact .section-title::after {
+            background: linear-gradient(90deg, white, rgba(255,255,255,0.5));
+        }
+
         .contact-info {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
             text-align: center;
         }
 
         .contact-item {
-            padding: 2rem;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
+            padding: 2.5rem;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.25);
         }
 
         .contact-item i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, white, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-item p {
+            font-size: 1.2rem;
+            font-weight: 500;
         }
 
         /* Footer */
         footer {
-            background: #333;
+            background: #1a1a2e;
             color: white;
-            padding: 2rem 0;
+            padding: 3rem 0;
             text-align: center;
+        }
+
+        footer p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
         /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -333,16 +482,34 @@
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
             }
 
             .hero-buttons {
                 flex-direction: column;
+                align-items: center;
             }
 
             .btn {
                 width: 100%;
+                max-width: 300px;
                 justify-content: center;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .download-card {
+                padding: 2.5rem;
+            }
+
+            .download-card h2 {
+                font-size: 2rem;
             }
         }
     </style>
